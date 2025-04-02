@@ -8,7 +8,20 @@ public class Program
     // main function
     public static void Main(string[] args)
     {
-        // parse the arguments
-        ArgumentParsing.ParseArguments(args);
+        // terminate with ctrl+c
+        Console.CancelKeyPress += delegate
+        {
+            //TOOD: add closing of the client and sending bye here
+            // if (client != null)
+            // {
+            //     HelperFunctions.SendMessageBye(client);
+            //     client.Close();
+            // }
+            System.Environment.Exit(0);
+
+        };
+        
+        // begin chatting
+        Chat.BeginChatting(args);
     }
 }

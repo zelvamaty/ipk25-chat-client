@@ -1,6 +1,8 @@
-﻿namespace ipk25_chat;
-// author: Matous Havlicek  (xhavli66)
-// file for argument parsing
+﻿// author: Matous Havlicek  (xhavli66)
+// file for utilities used in the project
+namespace ipk25_chat;
+
+
 public class Utils
 {
     // print usage 
