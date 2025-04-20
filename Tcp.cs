@@ -16,6 +16,7 @@ public class Tcp : IChatProtocol
     public void Close()
     {
         tcpClient?.Close();
+        tcpClient = null;
     }
     
     // send bye message
@@ -25,6 +26,7 @@ public class Tcp : IChatProtocol
         byte[] data = Encoding.ASCII.GetBytes(sendMessage);
         NetworkStream? stream = tcpClient?.GetStream();
         stream?.Write(data, 0, data.Length);
+        Close();
         return Task.CompletedTask;
     }
 

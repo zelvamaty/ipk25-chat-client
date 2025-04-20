@@ -50,10 +50,9 @@ public class Chat
     {
         chat.Connect(arguments.Server!, arguments.Port); // connect to the server
         // terminate with ctrl+c (sends correct BYE message depending on the protocol)
-        Console.CancelKeyPress += delegate
+        Console.CancelKeyPress += async delegate
         {
-            chat.Bye(displayName);
-            chat.Close();
+            await chat.Bye(displayName);
             System.Environment.Exit(0);
 
         };
@@ -108,7 +107,6 @@ public class Chat
                             if (input == "")
                             {
                                 await chat.Bye(displayName);
-                                chat.Close();
                                 System.Environment.Exit(0);
                             }
                             // cannot send anything besides /auth command
@@ -183,7 +181,6 @@ public class Chat
                             else
                             {
                                 await chat.Bye(displayName);
-                                chat.Close();
                                 System.Environment.Exit(0);
                             }
                         }
