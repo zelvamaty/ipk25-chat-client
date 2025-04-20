@@ -174,6 +174,7 @@ Necessary theory to understand how each protocol works.
     C:hulahej: ugrofinsko
     ```
     ![discord server auth](/images/first_udp.png)
+
     *screenshot from discord server for reference:*
     
     - *join the server and send and receive messages*
@@ -191,7 +192,9 @@ Necessary theory to understand how each protocol works.
     C:Server: man has joined `discord.general` via TCP.
     ```
     ![discord server communication](/images/second_udp.png)
+
     *screenshot from discord server and wireshark for reference:*
+
     ![wireshark communication](/images/wireshark.png)
     - *join the server and leave correctly after sending messages*
     ```
@@ -205,12 +208,17 @@ Necessary theory to understand how each protocol works.
     ```
     the BYE send (`ctrl+c`) is shown on the wireshark screenshot and steve left on the discord communication screenshot
     ![discord server communication](/images/third_udp.png)
+
     *screenshot from discord server and wireshark for reference:*
+    
     ![wireshark communication](/images/wireshark2.png)
 
 ## Biblography <a name="bibliography"></a>
-[1] Wikipedia. **Transmission Control Protocol**. [online]. April 2025. [cited 2025-04-18]. Available at https://en.wikipedia.org/wiki/Transmission_Control_Protocol 
+[1] Wikipedia. **Transmission Control Protocol**. [online]. April 2025. [cited 2025-04-18]. Available at https://en.wikipedia.org/wiki/Transmission_Control_Protocol
+
 [2] Wikipedia. **User Datagram Protocol**. [online]. April 2025. [cited 2025-04-18]. Available at https://en.wikipedia.org/wiki/User_Datagram_Protocol
+
 [3] The Wireshark Team. **Wireshark - Go Deep**. [online]. [cited 2025-04-19]. Available at: https://www.wireshark.org/
+
 [4] Nmap Project. **Ncat - Netcat for the 21st Century**. [online]. [cited 2025-04-19]. Available at: https://nmap.org/ncat/ 
 
