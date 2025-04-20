@@ -174,7 +174,6 @@ Necessary theory to understand how each protocol works.
     C:hulahej: ugrofinsko
     ```
     ![discord server auth](/images/first_udp.png)
-
     *screenshot from discord server for reference:*
     
     - **join the server and send and receive messages**
@@ -192,7 +191,6 @@ Necessary theory to understand how each protocol works.
     C:Server: man has joined `discord.general` via TCP.
     ```
     ![discord server communication](/images/second_udp.png)
-
     *screenshot from discord server and wireshark for reference:*
 
     ![wireshark communication](/images/wireshark.png)
@@ -208,7 +206,6 @@ Necessary theory to understand how each protocol works.
     ```
     the BYE send (`ctrl+c`) is shown on the wireshark screenshot and steve left on the discord communication screenshot
     ![discord server communication](/images/third_udp.png)
-
     *screenshot from discord server and wireshark for reference:*
 
     ![wireshark communication](/images/wireshark2.png)
