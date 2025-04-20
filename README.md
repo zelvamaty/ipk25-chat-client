@@ -162,7 +162,7 @@ Necessary theory to understand how each protocol works.
  client referred to as C, server as S.
   - Netcat can't really simulate invidual byte sendings so mainly the reference server was used. 
   - Things harder to replicate tested by running the public tests mentioned at the beginning of Testing part. 
-    - *authentification SUCCESS test*
+    - **authentification SUCCESS test**
 
     ```
     C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 ahojjjjjjjj 
@@ -177,7 +177,7 @@ Necessary theory to understand how each protocol works.
 
     *screenshot from discord server for reference:*
     
-    - *join the server and send and receive messages*
+    - **join the server and send and receive messages**
     ```
     C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve 
     C:Action Success: Authentication successful. 
@@ -196,7 +196,7 @@ Necessary theory to understand how each protocol works.
     *screenshot from discord server and wireshark for reference:*
 
     ![wireshark communication](/images/wireshark.png)
-    - *join the server and leave correctly after sending messages*
+    - **join the server and leave correctly after sending messages**
     ```
     C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
     C:Action Success: Authentication successful.
@@ -210,7 +210,7 @@ Necessary theory to understand how each protocol works.
     ![discord server communication](/images/third_udp.png)
 
     *screenshot from discord server and wireshark for reference:*
-    
+
     ![wireshark communication](/images/wireshark2.png)
 
 ## Biblography <a name="bibliography"></a>
