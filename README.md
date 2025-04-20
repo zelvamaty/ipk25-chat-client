@@ -9,6 +9,8 @@
 3. [How to run](#build-project)
 4. [Implementation details](#implementation)
 5. [Testing](#testing)
+    1. [TCP](#tcp_testing)
+    2. [UDP](#udp_testing)
 6. [Bibliography](#bibliography)
 
 ## Summary  <a name="summary"></a>
@@ -64,7 +66,7 @@ Necessary theory to understand how each protocol works.
 
 ### Test Results
 
-- **TCP**
+#### TCP <a name="tcp_testing"></a>
  most of the test cases were executed by `./ipk25chat-client -s 127.0.0.1 -p 6969 -t tcp`, unless specified otherwise, client referred to as C, netcat as S.
   - (netcat [4] used to listen to my messages and send back responses)
 `nc -C -l 127.0.0.1 6969`
@@ -157,7 +159,7 @@ Necessary theory to understand how each protocol works.
     C(input): ctrl+c
     Process finished with exit code 0.
     ```
-- **UDP**
+#### UDP <a name="udp_testing"></a>
  Most of the test cases were executed by `./ipk25chat-client -s anton5.fit.vutbr.cz -p 4567 -t udp`, unless specified otherwise.
  client referred to as C, server as S.
   - Netcat can't really simulate invidual byte sendings so mainly the reference server was used. 
