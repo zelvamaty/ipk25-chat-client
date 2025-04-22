@@ -49,8 +49,8 @@ Necessary theory to understand how each protocol works.
   - EndSuccess ------> ending with exit code error (0)
   - EndFailure ------> ending with exit code error (1)
 
+  <img src="images/ipk_diagramm.jpg" width="350">
   
-  ![class diagram](/images/ipk_diagramm.jpg)
   *class diagram*
 
 ## Testing <a name="testing"></a>
