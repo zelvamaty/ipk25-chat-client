@@ -152,7 +152,7 @@ Necessary theory to understand how each protocol works.
     ```
 
     - *join the provided reference server anton5.fit.vutbr.cz*
-    - joining and sending/receiving messages and leaving
+    - **joining and sending/receiving messages and leaving**
     ```
     C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 tcpcat
     C: Action Success: Authentication successful. 
@@ -164,7 +164,7 @@ Necessary theory to understand how each protocol works.
     C(input): ctrl+c
     Process finished with exit code 0.
     ```
-    - joining and sending/receiving messages and leaving
+    - **joining and sending msg, renaming and sending msg and leaving**
     ```
     C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
     C: Action Success: Authentication successful. 
