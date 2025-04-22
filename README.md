@@ -21,7 +21,7 @@
 ## Theory <a name="theory"></a>
 Necessary theory to understand how each protocol works.
 ### TCP <a name="tcp"></a>
-- Transmission Control Protocol [1] is a core internet protocol. Server and Client establish a connection by three-way handshake, they agree on terms before doing the communication. It is more reliable than UDP.
+- Transmission Control Protocol [1] is a core internet protocol. Server and Client establish a connection by three-way handshake, they agree on terms before doing the communication. It is more reliable than UDP. Used for instances where we don't want to lose any data.
 
 ### UDP <a name="udp"></a>
   - User Datagram Protocol [2] is connectionless and also a core internet protocol. It doesn't have strict rules like TCP does,  so the apps need to do most of the job. Actively listens on a specified port for any messages. It skips handshake unlike TCP, its faster, ideal for streaming something where dropping few frames is ok. 
@@ -37,9 +37,10 @@ Necessary theory to understand how each protocol works.
 
   
  ## Implementation details <a name="implementation"></a>
-  Everything starts in the `Main` function of the program where we call method from class `Chat` called `BeginChatting`(this method accepts the input arguments). From here we call the method `ParseArguments` ( from class `ArgumentParsing`) to process input arguments.
-  Depending on the chosen transport protocol, we set the `chat` variable (from interface `IChatProtocol`). This interface defines methods used by both protocols, classes `Udp` and `Tcp`  inherit from this Interface. 
-  After this point we move to method `Fsm` located in the `Chat` class. States switch based on the user input/server messages. In various states of the FSM, `chat.` methods are called to parse user input and incoming server messages.
+  - Everything starts in the `Main` function of the program where we call method from class `Chat` called `BeginChatting`(this method accepts the input arguments). From here we call the method `ParseArguments` located in the `ArgumentParsing` class to process input arguments.
+  We use the `IChatProtocol` interface to define the methods that both Tcp and Udp share. The `Udp` and `Tcp` classes implement this interface, and depending on which protocol is selected, we create an instance of the appropriate class.
+  After this point we move to method `Fsm` located in the `Chat` class. States switch based on the user input/server messages. Depending on the current state of the FSM, the program executes methods to process user input and parse incoming messages from the server.
+
   FSM states:
   - Start ------> waiting for /auth {username} {secret} {displayname} from user input
   - Auth ------> parse the REPLY message, if  OK -> go to Open
@@ -47,6 +48,10 @@ Necessary theory to understand how each protocol works.
   - Join ------> waiting for any REPLY message + receiving server messages
   - EndSuccess ------> ending with exit code error (0)
   - EndFailure ------> ending with exit code error (1)
+
+  
+  ![class diagram](/images/ipk_diagramm.jpg)
+  *class diagram*
 
 ## Testing <a name="testing"></a>
 
@@ -147,7 +152,7 @@ Necessary theory to understand how each protocol works.
     ```
 
     - *join the provided reference server anton5.fit.vutbr.cz*
-         joining and sending few messages/receiving messages and leaving
+    - joining and sending/receiving messages and leaving
     ```
     C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 tcpcat
     C: Action Success: Authentication successful. 
@@ -159,6 +164,22 @@ Necessary theory to understand how each protocol works.
     C(input): ctrl+c
     Process finished with exit code 0.
     ```
+    - joining and sending/receiving messages and leaving
+    ```
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
+    C: Action Success: Authentication successful. 
+    C: Server: steve has joined `discord.general` via TCP.
+    C(input): hello its me the TCP_steve 
+    C: Server: prrprrpatapim: jjj
+    C(input): /rename dragon
+    C(input): now im a dragon yippie
+    C(input): bye
+    C(input): ctrl+c
+    Process finished with exit code 0.
+    ```
+    - Wireshark showcase of this communication 
+    ![tcp wireshark](/images/wireshark_tcp.png)
+
 #### UDP <a name="udp_testing"></a>
  Most of the test cases were executed by `./ipk25chat-client -s anton5.fit.vutbr.cz -p 4567 -t udp`, unless specified otherwise.
  client referred to as C, server as S.
@@ -167,31 +188,63 @@ Necessary theory to understand how each protocol works.
     - **authentification SUCCESS test**
 
     ```
-    C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 ahojjjjjjjj 
-    C:Action Success: Authentication successful. 
-    C:Server: ahojjjjjjjj has joined `discord.general` via UDP. 
-    C:Server: meow has joined `discord.general` via TCP. 
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 ahojjjjjjjj 
+    C: Action Success: Authentication successful. 
+    C: Server: ahojjjjjjjj has joined `discord.general` via UDP. 
+    C: Server: meow has joined `discord.general` via TCP. 
     C(input): ahoj vsichni
-    C:Server: testing44 has joined `discord.general` via UDP. 
-    C:hulahej: ugrofinsko
+    C: Server: testing44 has joined `discord.general` via UDP. 
+    C: hulahej: ugrofinsko
+    C: ctrl+c
     ```
     ![discord server auth](/images/first_udp.png)
 
     *screenshot from discord server for reference:*
+
+    - **join the server, send message, /join different channel, leave**
+    
+    ```
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
+    C: Action Success: Authentication successful.
+    C: Server: steve has joined `discord.general` via UDP.
+    C(input): la la la lava
+    C: Server: testname has joined discord.general via UDP.
+    C(input): /join kresadlo
+    C: Server: steve has joined kresadlo via UDP.
+    C: Action Success: Channel kresadlo successfully joined.
+    C: Server: steve has joined kresadlo via UDP.
+    C: ctrl+c
+    ```
+    wireshark (using the provided dissector `ipk25-chat.lua`) showing the whole communication, pings as well, this behaviour and outcome was expected
+    ![wireshark communication](/images/better_wireshark.png)
+
+    - **join the server, send message, rename, send another, leave**
+    ```
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
+    C: Action Success: Authentication successful.
+    C: Server: steve has joined `discord.general` via UDP.
+    C(input): hey im steve
+    C(input): /rename dragon
+    C(input): now im dragon yippie
+    C: ctrl+c
+    ```
+    after rename, dragon says bye, not steve as shown on this wireshark screenshot
+    ![wireshark communication](/images/better_wireshark2.png)
     
     - **join the server and send and receive messages**
     ```
-    C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve 
-    C:Action Success: Authentication successful. 
-    C:Server: steve has joined `discord.general` via UDP. 
-    C:Captain_Bober: ajo vlastne a to blokuje ten nat 
-    C(input):lava 
-    C:Server: lili has joined `discord.general` via UDP. 
-    C:terename: rename 
-    C(input):/rename pes 
-    C:Server: petocmorik has joined `discord.general` via TCP.
-    C(input):pes skace
-    C:Server: man has joined `discord.general` via TCP.
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve 
+    C: Action Success: Authentication successful. 
+    C: Server: steve has joined `discord.general` via UDP. 
+    C: Captain_Bober: ajo vlastne a to blokuje ten nat 
+    C(input): lava 
+    C: Server: lili has joined `discord.general` via UDP. 
+    C: terename: rename 
+    C(input): /rename pes 
+    C: Server: petocmorik has joined `discord.general` via TCP.
+    C(input): pes skace
+    C: Server: man has joined `discord.general` via TCP.
+    C: ctrl+c
     ```
     ![discord server communication](/images/second_udp.png)
 
@@ -200,13 +253,13 @@ Necessary theory to understand how each protocol works.
     ![wireshark communication](/images/wireshark.png)
     - **join the server and leave correctly after sending messages**
     ```
-    C(input):/auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
-    C:Action Success: Authentication successful.
-    C:Server: steve has joined `discord.general` via UDP.
-    C(input):ahoj zdravim
-    C:Server: aragorn has switched from `discord.general` to `dis`.
-    C(input):tak ja zas mizim
-    C:ctrl+c
+    C(input): /auth xhavli66 725ef352-a42f-4757-b28b-cac090bf55a6 steve
+    C: Action Success: Authentication successful.
+    C: Server: steve has joined `discord.general` via UDP.
+    C(input): ahoj zdravim
+    C: Server: aragorn has switched from `discord.general` to `dis`.
+    C(input): tak ja zas mizim
+    C: ctrl+c
     ```
     the BYE send (`ctrl+c`) is shown on the wireshark screenshot and steve left on the discord communication screenshot
     ![discord server communication](/images/third_udp.png)
@@ -214,6 +267,9 @@ Necessary theory to understand how each protocol works.
     *screenshot from discord server and wireshark for reference:*
 
     ![wireshark communication](/images/wireshark2.png)
+
+    
+
 
 ## Biblography <a name="bibliography"></a>
 [1] Wikipedia. **Transmission Control Protocol**. [online]. April 2025. [cited 2025-04-18]. Available at https://en.wikipedia.org/wiki/Transmission_Control_Protocol
