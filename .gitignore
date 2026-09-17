@@ -1,0 +1,11 @@
+﻿# .NET Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+xhavli66.zip
